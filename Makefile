@@ -6,7 +6,7 @@
 #    By: logan  <logan@42.us.org>                   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/13 10:03:24 by logan             #+#    #+#              #
-#    Updated: 2018/08/28 18:22:37 by lkaser           ###   ########.fr        #
+#    Updated: 2018/08/29 12:10:24 by lkaser           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ DEP = $(OBJ:%.bc=%.d)
 CC = em++
 SUB =
 
-CPPFLAGS = -Wall -Wextra -Werror -s USE_WEBGL2=1 -std=c++14 -O3 -s WASM=1 \ 
+CPPFLAGS = -Wall -Wextra -Werror \
+-O3 -s USE_WEBGL2=1 -std=c++14 -s WASM=1 \ 
 $(INCLUDES)
 
 LDFLAGS =
@@ -61,10 +62,9 @@ fclean:
 		make -sC $$s fclean;\
 	done
 	@printf "\e[31;1mFull Cleaning..\e[0m\n"
-	rm -rf $(OBJ_DIR)
-	rm -f $(NAME)
-	rm -f $(NAME).js
-	rm -f $(NAME).wasm
+	@rm -rf $(OBJ_DIR)
+	@rm -f $(NAME).js
+	@rm -f $(NAME).wasm
 
 run: re
 	python3 -m http.server 8080
