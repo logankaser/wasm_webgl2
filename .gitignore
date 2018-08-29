@@ -1,0 +1,12 @@
+index.js
+*.wasm
+obj
+.DS*
+.nfs*
+._*
+*.bc
+*.o
+*.a
+*.dSYM
+*.d
+*.swp
