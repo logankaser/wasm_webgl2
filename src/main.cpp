@@ -6,8 +6,6 @@
 
 int	main(void)
 {
-	char* id;
-
     EmscriptenWebGLContextAttributes attrs;
     emscripten_webgl_init_context_attributes(&attrs);
     attrs.depth = 1;
@@ -16,6 +14,6 @@ int	main(void)
     attrs.majorVersion = 2;
     attrs.minorVersion = 0;
 
-	auto context = emscripten_webgl_create_context(id, &attrs);
+	auto context = emscripten_webgl_create_context("canvas", &attrs);
 	emscripten_webgl_make_context_current(context);
 }

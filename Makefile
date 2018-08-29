@@ -6,7 +6,7 @@
 #    By: logan  <logan@42.us.org>                   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/13 10:03:24 by logan             #+#    #+#              #
-#    Updated: 2018/08/29 12:10:24 by lkaser           ###   ########.fr        #
+#    Updated: 2018/08/29 14:41:17 by lkaser           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,8 @@ fclean:
 	@rm -f $(NAME).js
 	@rm -f $(NAME).wasm
 
-run: re
+run:
+	./compile.sh
 	python3 -m http.server 8080
 
 re:	fclean all
