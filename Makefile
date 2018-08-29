@@ -26,7 +26,7 @@ CPPFLAGS = -Wall -Wextra -Werror \
 -O3 -s USE_WEBGL2=1 -std=c++14 -s WASM=1 \ 
 $(INCLUDES)
 
-LDFLAGS =
+LDFLAGS = -O3 --closure 1
 
 all: $(OBJ_DIR) $(NAME)
 

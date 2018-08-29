@@ -17,3 +17,6 @@ int	main(void)
 	auto context = emscripten_webgl_create_context("canvas", &attrs);
 	emscripten_webgl_make_context_current(context);
 }
+
+// Will get called whenever the browser is ready for a new frame.
+// void emscripten_set_main_loop(void (*render)(void), 0, false)
