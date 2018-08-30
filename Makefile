@@ -26,7 +26,7 @@ CPPFLAGS = -Wall -Wextra -Werror \
 -O3 -s USE_WEBGL2=1 -std=c++14 -s WASM=1 \ 
 $(INCLUDES)
 
-LDFLAGS = -O3 --closure 1 --embed-file assets
+LDFLAGS = -O3 --closure 1 --preload-file assets
 
 all: $(OBJ_DIR) $(NAME)
 
