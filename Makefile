@@ -6,7 +6,7 @@
 #    By: logan  <logan@42.us.org>                   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/13 10:03:24 by logan             #+#    #+#              #
-#    Updated: 2018/08/29 19:10:46 by lkaser           ###   ########.fr        #
+#    Updated: 2018/08/30 18:06:07 by lkaser           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,10 +23,10 @@ CC = em++
 SUB =
 
 CPPFLAGS = -Wall -Wextra -Werror \
--O3 -s USE_WEBGL2=1 -std=c++14 -s WASM=1 \ 
+-O3 -s USE_WEBGL2=1 -s ALLOW_MEMORY_GROWTH=1 -std=c++14 -s WASM=1 \ 
 $(INCLUDES)
 
-LDFLAGS = -O3 --closure 1 --preload-file assets
+LDFLAGS = --llvm-lto 3 -O3 --closure 1 --preload-file assets
 
 all: $(OBJ_DIR) $(NAME)
 
@@ -65,9 +65,9 @@ fclean:
 	@rm -rf $(OBJ_DIR)
 	@rm -f $(NAME).js
 	@rm -f $(NAME).wasm
+	@rm -f $(NAME).data
 
-run:
-	./compile.sh
+run: all
 	python3 -m http.server 8080
 
 re:	fclean all

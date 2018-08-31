@@ -1,5 +1,6 @@
 index.js
-*.wasm
+index.wasm
+index.data
 obj
 .DS*
 .nfs*
