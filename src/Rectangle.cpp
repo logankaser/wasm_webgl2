@@ -7,40 +7,6 @@ GLuint Rectangle::_dimensionLocationID;
 GLuint Rectangle::_centerLocationID;
 ShadingProgram* Rectangle::_program = nullptr;
 
-Rectangle::Rectangle(float width, float height, glm::dvec2 center, Texture texture) :
-_width(width),
-_height(height),
-_center(center)
-{
-	if (!_program)
-	{
-		_program = new ShadingProgram(RECT_VERT_PATH, RECT_FRAG_PATH);
-		_texLocationID = glGetUniformLocation(_program->ID(), "tex");
-		_dimensionLocationID = glGetUniformLocation(_program->ID(), "dimension");
-		_centerLocationID = glGetUniformLocation(_program->ID(), "center");
-		loadArrayBuffers();
-	}
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-	glGenTextures(1, &_textureID);
-	glBindTexture(GL_TEXTURE_2D, _textureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexImage2D(GL_TEXTURE_2D,
-		     0,
-		     GL_RGBA,
-		     texture.width,
-		     texture.height,
-		     0,
-		     GL_RGBA,
-		     GL_UNSIGNED_BYTE,
-		     texture.data);
-}
-
 void	Rectangle::loadArrayBuffers()
 {
 	const float vertex_array[] = { 0.5, -0.5, -0.5, -0.5,  0.5,  0.5,
@@ -61,20 +27,28 @@ void	Rectangle::loadArrayBuffers()
 		     GL_STATIC_DRAW);
 }
 
-void	Rectangle::Render()
+void	Rectangle::Render(float width, float height, glm::vec2 center, GLuint textureID)
 {
+	if (!_program)
+	{
+		_program = new ShadingProgram(RECT_VERT_PATH, RECT_FRAG_PATH);
+		_texLocationID = glGetUniformLocation(_program->ID(), "tex");
+		_dimensionLocationID = glGetUniformLocation(_program->ID(), "dimension");
+		_centerLocationID = glGetUniformLocation(_program->ID(), "center");
+		loadArrayBuffers();
+	}
 	_program->Use();
 
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glBindTexture(GL_TEXTURE_2D, _textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
 	glActiveTexture(GL_TEXTURE0);
 	glUniform1i(_texLocationID, 0);
 
-	glUniform2f(_dimensionLocationID, _width, _height);
-	glUniform2f(_centerLocationID, _center.x, _center.y);
+	glUniform2f(_dimensionLocationID, width, height);
+	glUniform2f(_centerLocationID, center.x, center.y);
 	
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexArrayID);
 	glEnableVertexAttribArray(0);

@@ -1,8 +1,13 @@
 #pragma once
 
-struct Texture
+#include "graphic_core.hpp"
+
+class Texture
 {
-	size_t width;
-	size_t height;
-	unsigned char* data;
+	GLuint _ID;
+public:
+	Texture(unsigned width, unsigned height, unsigned char* data);
+	~Texture();
+
+	GLuint ID();
 };

@@ -13,7 +13,8 @@
 NAME = index
 LIST = main \
 ShadingProgram \
-Rectangle
+Rectangle \
+Texture
 
 SRC_DIR = src
 OBJ_DIR = obj

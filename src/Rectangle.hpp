@@ -16,15 +16,8 @@ class	Rectangle
 	static GLuint _centerLocationID;
 	static ShadingProgram* _program;
 
-	GLuint _textureID;
-
-	float _width;
-	float _height;
-	glm::vec2 _center;
-
-	void	loadArrayBuffers();
+	static void	loadArrayBuffers();
 	
 public:
-	Rectangle(float width, float height, glm::dvec2 center, Texture texture);
-	void	Render();
+	static void	Render(float width, float height, glm::vec2 center, GLuint textureID);
 };

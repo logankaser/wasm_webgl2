@@ -16,8 +16,7 @@ void	test_render()
 					100, 100, 129, 255,
 					255, 255, 255, 255};
 	Texture t = {2, 2, test_texture};
-	Rectangle r(1, 1.3, glm::vec2(0.3), t);
-	r.Render();
+	Rectangle::Render(1, 1.3, glm::vec2(0.3), t.ID());
 }
 
 int	main(void)
