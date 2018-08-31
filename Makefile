@@ -6,12 +6,14 @@
 #    By: logan  <logan@42.us.org>                   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/13 10:03:24 by logan             #+#    #+#              #
-#    Updated: 2018/08/30 18:06:07 by lkaser           ###   ########.fr        #
+#    Updated: 2018/08/29 19:21:43 by twalton          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = index
-LIST = main
+LIST = main \
+ShadingProgram \
+Rectangle
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -21,9 +23,10 @@ OBJ = $(addsuffix .bc, $(addprefix $(OBJ_DIR)/, $(LIST)))
 DEP = $(OBJ:%.bc=%.d)
 CC = em++
 SUB =
+INCLUDES=-I ~/.brew/include
 
 CPPFLAGS = -Wall -Wextra -Werror \
--O3 -s USE_WEBGL2=1 -s ALLOW_MEMORY_GROWTH=1 -std=c++14 -s WASM=1 \ 
+-O3 -s USE_WEBGL2=1 -s ALLOW_MEMORY_GROWTH=1 -std=c++14 -s WASM=1 \
 $(INCLUDES)
 
 LDFLAGS = --llvm-lto 3 -O3 --closure 1 --preload-file assets
