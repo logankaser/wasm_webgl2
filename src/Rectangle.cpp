@@ -27,7 +27,7 @@ void	Rectangle::loadArrayBuffers()
 		     GL_STATIC_DRAW);
 }
 
-void	Rectangle::Render(float width, float height, glm::vec2 center, GLuint textureID)
+void	Rectangle::Render(const std::vector<Rectangle>& rectangles)
 {
 	if (!_program)
 	{
@@ -43,22 +43,26 @@ void	Rectangle::Render(float width, float height, glm::vec2 center, GLuint textu
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glActiveTexture(GL_TEXTURE0);
-	glUniform1i(_texLocationID, 0);
-
-	glUniform2f(_dimensionLocationID, width, height);
-	glUniform2f(_centerLocationID, center.x, center.y);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, _vertexArrayID);
 	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, _vertexArrayID);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, _uvArrayID);
 	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, _uvArrayID);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-	glDrawArrays(GL_TRIANGLES, 0, 2 * 3);
+	for (unsigned i = 0; i < rectangles.size(); i++)
+	{
+		if (i == 0 || rectangles[i].textureID != rectangles[i - 1].textureID)
+		{
+			glBindTexture(GL_TEXTURE_2D, rectangles[i].textureID);
+			glActiveTexture(GL_TEXTURE0);
+			glUniform1i(_texLocationID, 0);
+		}
+		glUniform2f(_dimensionLocationID, rectangles[i].width, rectangles[i].height);
+		glUniform2f(_centerLocationID, rectangles[i].center.x, rectangles[i].center.y);
+
+		glDrawArrays(GL_TRIANGLES, 0, 2 * 3);
+	}
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);

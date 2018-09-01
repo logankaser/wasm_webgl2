@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include "graphic_core.hpp"
 #include "Texture.hpp"
 #include "ShadingProgram.hpp"
@@ -19,5 +20,13 @@ class	Rectangle
 	static void	loadArrayBuffers();
 	
 public:
-	static void	Render(float width, float height, glm::vec2 center, GLuint textureID);
+
+	float width;
+	float height;
+	glm::vec2 center;
+	GLuint textureID;
+
+	// for optimal rendering, place rectangles with the same textureIDs
+	// next to each other
+	static void	Render(const std::vector<Rectangle>&);
 };
