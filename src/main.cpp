@@ -17,12 +17,7 @@ void	test_render()
 					255, 255, 255, 255};
 	Texture t1 = {2, 2, test_texture1};
 
-	unsigned char test_texture2[] = {22, 49, 140, 255,
-                                        100, 200, 100, 255,
-                                        100, 150, 129, 255,
-                                        255, 255, 255, 255};
-        Texture t2 = {2, 2, test_texture2};
-	
+	Texture t2 = Texture::GenerateFromSVG("assets/svg_test.svg");
 	std::vector<Rectangle> rects;
 	rects.push_back(Rectangle{1, 1.3, glm::vec2(0.3), t1.ID()});
 	rects.push_back(Rectangle{0.4, 0.1, glm::vec2(-0.5), t2.ID()});
