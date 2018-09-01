@@ -7,7 +7,7 @@
 #include "nanosvg.h"
 #include "nanosvgrast.h"
 
-Texture	Texture::GenerateFromSVG(const std::string& filepath)
+Texture*	Texture::GenerateFromSVG(const std::string& filepath)
 {
 	NSVGimage *image = NULL;
 	NSVGrasterizer *rast = NULL;
@@ -29,7 +29,7 @@ Texture	Texture::GenerateFromSVG(const std::string& filepath)
 
 	nsvgRasterize(rast, image, 0, 0, 1, img, w, h, w * 4);
 
-	Texture out(w, h, img);
+	Texture* out = new Texture(w, h, img);
 	
 	delete img;
 	nsvgDeleteRasterizer(rast);

@@ -6,11 +6,14 @@
 class Texture
 {
 	GLuint _ID;
+
+	Texture(const Texture&);
+	Texture& operator=(const Texture&);
 public:
 	Texture(unsigned width, unsigned height, unsigned char* data);
 	~Texture();
 
-	static Texture	GenerateFromSVG(const std::string& filepath);
-	
+	static Texture*	GenerateFromSVG(const std::string& filepath);
+
 	GLuint ID();
 };
