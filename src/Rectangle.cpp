@@ -5,6 +5,7 @@ GLuint Rectangle::_uvArrayID;
 GLuint Rectangle::_texLocationID;
 GLuint Rectangle::_dimensionLocationID;
 GLuint Rectangle::_centerLocationID;
+GLuint Rectangle::_VAO;
 ShadingProgram* Rectangle::_program = nullptr;
 
 void	Rectangle::loadArrayBuffers()
@@ -27,6 +28,20 @@ void	Rectangle::loadArrayBuffers()
 		     GL_STATIC_DRAW);
 }
 
+void	Rectangle::bindArrayBuffers()
+{
+	glGenVertexArrays(1, &_VAO);
+	glBindVertexArray(_VAO);
+
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, _vertexArrayID);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, _uvArrayID);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+}
+
 void	Rectangle::Render(const std::vector<Rectangle>& rectangles)
 {
 	if (!_program)
@@ -36,6 +51,7 @@ void	Rectangle::Render(const std::vector<Rectangle>& rectangles)
 		_dimensionLocationID = glGetUniformLocation(_program->ID(), "dimension");
 		_centerLocationID = glGetUniformLocation(_program->ID(), "center");
 		loadArrayBuffers();
+		bindArrayBuffers();
 	}
 	_program->Use();
 
@@ -43,16 +59,11 @@ void	Rectangle::Render(const std::vector<Rectangle>& rectangles)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, _vertexArrayID);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, _uvArrayID);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindVertexArray(_VAO);
 
 	for (unsigned i = 0; i < rectangles.size(); i++)
 	{
-		if (i == 0 || rectangles[i].textureID != rectangles[i - 1].textureID)
+		if (!i || rectangles[i].textureID != rectangles[i - 1].textureID)
 		{
 			glBindTexture(GL_TEXTURE_2D, rectangles[i].textureID);
 			glActiveTexture(GL_TEXTURE0);
@@ -63,7 +74,4 @@ void	Rectangle::Render(const std::vector<Rectangle>& rectangles)
 
 		glDrawArrays(GL_TRIANGLES, 0, 2 * 3);
 	}
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
 }
