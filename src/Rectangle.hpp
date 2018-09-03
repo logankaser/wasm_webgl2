@@ -15,9 +15,11 @@ class	Rectangle
 	static GLuint _texLocationID;
 	static GLuint _dimensionLocationID;
 	static GLuint _centerLocationID;
+	static GLuint _VAO;
 	static ShadingProgram* _program;
 
 	static void	loadArrayBuffers();
+	static void	bindArrayBuffers();
 	
 public:
 
