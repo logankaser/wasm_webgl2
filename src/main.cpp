@@ -16,13 +16,14 @@ void	test_render()
 					255, 255, 255, 255};
 	Texture t1 = {2, 2, test_texture1};
 
-	Texture* t2 = Texture::GenerateFromSVG("assets/svg_test.svg");
+	Texture t2 = Texture::GenerateFromSVG("assets/svg_test.svg");
+	Texture t3 = t2;
 	std::vector<Rectangle> rects;
 	rects.push_back(Rectangle{1, 1.3, glm::vec2(0.3), t1.ID()});
-	rects.push_back(Rectangle{0.4, 0.1, glm::vec2(-0.5), t2->ID()});
+	rects.push_back(Rectangle{0.4, 0.1, glm::vec2(-0.5), t2.ID()});
+	rects.push_back(Rectangle{0.1, 0.3, glm::vec2(0), t3.ID()});
 
 	Rectangle::Render(rects);
-	delete t2;
 }
 
 int	main(void)

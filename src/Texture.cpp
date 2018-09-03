@@ -7,7 +7,7 @@
 #include "nanosvg.h"
 #include "nanosvgrast.h"
 
-Texture*	Texture::GenerateFromSVG(const std::string& filepath)
+Texture	Texture::GenerateFromSVG(const std::string& filepath)
 {
 	NSVGimage *image = NULL;
 	NSVGrasterizer *rast = NULL;
@@ -29,7 +29,7 @@ Texture*	Texture::GenerateFromSVG(const std::string& filepath)
 
 	nsvgRasterize(rast, image, 0, 0, 1, img, w, h, w * 4);
 
-	Texture* out = new Texture(w, h, img);
+	Texture out(w, h, img);
 	
 	delete img;
 	nsvgDeleteRasterizer(rast);
@@ -38,11 +38,19 @@ Texture*	Texture::GenerateFromSVG(const std::string& filepath)
 	return out;
 }
 
+static void on_delete(GLuint* id_ptr)
+{
+	glDeleteTextures(1, id_ptr);
+	delete id_ptr;
+}
+
 Texture::Texture(unsigned width, unsigned height, unsigned char* data)
 {
+	GLuint ID;
+
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-	glGenTextures(1, &_ID);
-	glBindTexture(GL_TEXTURE_2D, _ID);
+	glGenTextures(1, &ID);
+	glBindTexture(GL_TEXTURE_2D, ID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -58,14 +66,11 @@ Texture::Texture(unsigned width, unsigned height, unsigned char* data)
 		     GL_RGBA,
 		     GL_UNSIGNED_BYTE,
 		     data);
-}
 
-Texture::~Texture()
-{
-	glDeleteTextures(1, &_ID);
+	_ID = std::shared_ptr<GLuint>(new GLuint(ID), on_delete);
 }
 
 GLuint	Texture::ID()
 {
-	return _ID;
+	return *_ID;
 }
