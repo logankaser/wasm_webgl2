@@ -1,9 +1,8 @@
-#include <emscripten.h>
-#include <emscripten/html5.h>
 #include <iostream>
 #include <vector>
 #include <cstring>
 
+#include "GLWindow.hpp"
 #include "Rectangle.hpp"
 
 void	test_render()
@@ -28,16 +27,7 @@ void	test_render()
 
 int	main(void)
 {
-	EmscriptenWebGLContextAttributes attrs;
-	emscripten_webgl_init_context_attributes(&attrs);
-	attrs.depth = 1;
-	attrs.stencil = 1;
-	attrs.antialias = 1;
-	attrs.majorVersion = 2;
-	attrs.minorVersion = 0;
-
-	auto context = emscripten_webgl_create_context("canvas", &attrs);
-	emscripten_webgl_make_context_current(context);
+	GLWindow window("canvas");
 
 	emscripten_set_main_loop(test_render, 0, 0);
 }
