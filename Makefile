@@ -12,6 +12,7 @@
 
 NAME = index
 LIST = main \
+GLWindow \
 ShadingProgram \
 Rectangle \
 Texture
