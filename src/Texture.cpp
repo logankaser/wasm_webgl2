@@ -7,7 +7,7 @@
 #include "nanosvg.h"
 #include "nanosvgrast.h"
 
-Texture	Texture::GenerateFromSVG(const std::string& filepath)
+Texture	Texture::GenerateFromSVG(const std::string& filepath, int size)
 {
 	NSVGimage *image = NULL;
 	NSVGrasterizer *rast = NULL;
@@ -15,7 +15,7 @@ Texture	Texture::GenerateFromSVG(const std::string& filepath)
 	int w, h;
 	const char* filename = filepath.c_str();
 
-	image = nsvgParseFromFile(filename, "px", 96.0f);
+	image = nsvgParseFromFile(filename, "px", size);
 	if (image == NULL)
 		std::cerr << filepath << " was invalid" << std::endl;
 	w = (int)image->width;
@@ -25,6 +25,8 @@ Texture	Texture::GenerateFromSVG(const std::string& filepath)
 	if (rast == NULL)
 		std::cerr << "nsvg raster failed to init" << std::endl;
 
+	std::cout << "width: " << w << " height: " << h << std::endl;
+	
 	img = new unsigned char[w * h * sizeof(int)];
 
 	nsvgRasterize(rast, image, 0, 0, 1, img, w, h, w * 4);

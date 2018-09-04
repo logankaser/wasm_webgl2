@@ -5,8 +5,11 @@
 #include "GLWindow.hpp"
 #include "Rectangle.hpp"
 
-void	test_render()
+void	test_render(void* arg)
 {
+	(void)arg;
+//	GLWindow* window = (GLWindow*)arg;
+
 	glClearColor(0.5, 0.1, 0.9, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -16,7 +19,7 @@ void	test_render()
 					255, 255, 255, 255};
 	Texture t1 = {2, 2, test_texture1};
 
-	Texture t2 = Texture::GenerateFromSVG("assets/svg_test.svg");
+	Texture t2 = Texture::GenerateFromSVG("assets/svg_test.svg", 10);
 	Texture t3 = t2;
 	std::vector<Rectangle> rects;
 	rects.push_back(Rectangle{1, 1.3, glm::vec2(0.3), t1.ID()});
@@ -30,5 +33,5 @@ int	main(void)
 {
 	GLWindow window("canvas");
 
-	emscripten_set_main_loop(test_render, 0, 0);
+	emscripten_set_main_loop_arg(test_render, &window, 0, 0);
 }
