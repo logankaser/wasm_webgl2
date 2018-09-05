@@ -6,13 +6,14 @@
 #    By: logan  <logan@42.us.org>                   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/13 10:03:24 by logan             #+#    #+#              #
-#    Updated: 2018/08/29 19:21:43 by twalton          ###   ########.fr        #
+#    Updated: 2018/09/03 20:58:31 by twalton          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = index
 LIST = main \
 GLWindow \
+Input \
 ShadingProgram \
 Rectangle \
 Texture
@@ -31,7 +32,8 @@ CPPFLAGS = -Wall -Wextra -Werror \
 -O3 -s USE_WEBGL2=1 -s ALLOW_MEMORY_GROWTH=1 -std=c++14 -s WASM=1 \
 $(INCLUDES)
 
-LDFLAGS = --llvm-lto 3 -O3 --closure 1 --preload-file assets
+#LDFLAGS = --llvm-lto 3 -O3 --closure 1 --preload-file assets
+LDFLAGS = --preload-file assets
 
 all: $(OBJ_DIR) $(NAME)
 

@@ -4,6 +4,7 @@
 
 #include "GLWindow.hpp"
 #include "Rectangle.hpp"
+#include "Input.hpp"
 
 void	test_render(void* arg)
 {
@@ -32,6 +33,7 @@ void	test_render(void* arg)
 int	main(void)
 {
 	GLWindow window("canvas");
+	Input input("body");
 
 	emscripten_set_main_loop_arg(test_render, &window, 0, 0);
 }

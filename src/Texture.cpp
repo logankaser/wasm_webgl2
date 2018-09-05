@@ -25,7 +25,7 @@ Texture	Texture::GenerateFromSVG(const std::string& filepath, int size)
 	if (rast == NULL)
 		std::cerr << "nsvg raster failed to init" << std::endl;
 
-	std::cout << "width: " << w << " height: " << h << std::endl;
+//	std::cout << "width: " << w << " height: " << h << std::endl;
 	
 	img = new unsigned char[w * h * sizeof(int)];
 
