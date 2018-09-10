@@ -8,8 +8,7 @@
 
 void	test_render(void* arg)
 {
-	(void)arg;
-//	GLWindow* window = (GLWindow*)arg;
+	Input* input = (Input*)arg;
 
 	glClearColor(0.5, 0.1, 0.9, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -28,12 +27,16 @@ void	test_render(void* arg)
 	rects.push_back(Rectangle{0.1, 0.3, glm::vec2(0), t3.ID()});
 
 	Rectangle::Render(rects);
+
+	std::cout << input->MouseDown(0) << std::endl;
 }
 
 int	main(void)
 {
-	GLWindow window("canvas");
-	Input input("body");
+	GLWindow* window = new GLWindow("canvas");
+	Input* input = new Input("body");
 
-	emscripten_set_main_loop_arg(test_render, &window, 0, 0);
+	(void)window;
+
+	emscripten_set_main_loop_arg(test_render, input, 0, 0);
 }
