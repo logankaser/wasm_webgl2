@@ -5,15 +5,11 @@
 
 class Texture
 {
-	GLuint _ID;
-
-	Texture(const Texture&);
-	Texture& operator=(const Texture&);
+	std::shared_ptr<GLuint> _ID;
 public:
 	Texture(unsigned width, unsigned height, unsigned char* data);
-	~Texture();
 
-	static Texture*	GenerateFromSVG(const std::string& filepath);
+	static Texture	GenerateFromSVG(const std::string& filepath, int size);
 
 	GLuint ID();
 };
