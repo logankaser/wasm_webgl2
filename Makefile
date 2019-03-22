@@ -6,7 +6,7 @@
 #    By: logan  <logan@42.us.org>                   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/13 10:03:24 by logan             #+#    #+#              #
-#    Updated: 2018/09/03 20:58:31 by twalton          ###   ########.fr        #
+#    Updated: 2019/03/21 14:56:53 by lkaser           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,19 +21,19 @@ Texture
 SRC_DIR = src
 OBJ_DIR = obj
 
-SRC = $(addsuffix .cpp, $(addprefix src/, $(LIST)))
+VPATH = src
+
+SRC = $(addsuffix .cpp, $(LIST))
 OBJ = $(addsuffix .bc, $(addprefix $(OBJ_DIR)/, $(LIST)))
 DEP = $(OBJ:%.bc=%.d)
 CC = em++
 SUB =
 INCLUDES=-I ~/.brew/include
 
-CPPFLAGS = -Wall -Wextra -Werror \
--O3 -s USE_WEBGL2=1 -s ALLOW_MEMORY_GROWTH=1 -std=c++14 -s WASM=1 \
-$(INCLUDES)
+CPPFLAGS = -Wall -Wextra -Werror -O3 -std=c++17 $(INCLUDES)
 
-#LDFLAGS = --llvm-lto 3 -O3 --closure 1 --preload-file assets
-LDFLAGS = --preload-file assets
+LDFLAGS = -s ALLOW_MEMORY_GROWTH=1 -s WASM=1 -s USE_WEBGL2=1 --llvm-lto 3 -O3 --closure 1 --preload-file assets -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1
+#LDFLAGS = -s ALLOW_MEMORY_GROWTH=1 -s WASM=1 -s USE_WEBGL2=1 --preload-file assets -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1
 
 all: $(OBJ_DIR) $(NAME)
 
