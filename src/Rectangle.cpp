@@ -6,26 +6,35 @@ GLuint Rectangle::_texLocationID;
 GLuint Rectangle::_dimensionLocationID;
 GLuint Rectangle::_centerLocationID;
 GLuint Rectangle::_VAO;
-ShadingProgram* Rectangle::_program = nullptr;
+std::shared_ptr<ShadingProgram> Rectangle::_program;
 
 void	Rectangle::loadArrayBuffers()
 {
-	const float vertex_array[] = { 0.5, -0.5, -0.5, -0.5,  0.5,  0.5,
-				      -0.5,  0.5, -0.5, -0.5,  0.5,  0.5};
+	const float vertex_array[] = {
+		+0.5, -0.5, -0.5, -0.5, +0.5, +0.5,
+		-0.5, +0.5, -0.5, -0.5, +0.5, +0.5
+	};
 	glGenBuffers(1, &_vertexArrayID);
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexArrayID);
-	glBufferData(GL_ARRAY_BUFFER,
-		     sizeof(vertex_array),
-		     vertex_array,
-		     GL_STATIC_DRAW);
+	glBufferData(
+		GL_ARRAY_BUFFER,
+		sizeof(vertex_array),
+		vertex_array,
+		GL_STATIC_DRAW
+	);
 
-	const float uv_array[] = {1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1};
+	const float uv_array[] = {
+		1.0, 0.0, 0.0, 0.0, 1.0, 1.0,
+		0.0, 1.0, 0.0, 0.0, 1.0, 1.0
+	};
 	glGenBuffers(1, &_uvArrayID);
 	glBindBuffer(GL_ARRAY_BUFFER, _uvArrayID);
-	glBufferData(GL_ARRAY_BUFFER,
-		     sizeof(uv_array),
-		     uv_array,
-		     GL_STATIC_DRAW);
+	glBufferData(
+		GL_ARRAY_BUFFER,
+		sizeof(uv_array),
+		uv_array,
+		GL_STATIC_DRAW
+	);
 }
 
 void	Rectangle::bindArrayBuffers()
@@ -46,10 +55,10 @@ void	Rectangle::Render(const std::vector<Rectangle>& rectangles)
 {
 	if (!_program)
 	{
-		_program = new ShadingProgram(RECT_VERT_PATH, RECT_FRAG_PATH);
-		_texLocationID = glGetUniformLocation(_program->ID(), "tex");
-		_dimensionLocationID = glGetUniformLocation(_program->ID(), "dimension");
-		_centerLocationID = glGetUniformLocation(_program->ID(), "center");
+		_program = std::make_shared<ShadingProgram>(RECT_VERT_PATH, RECT_FRAG_PATH);
+		_texLocationID = _program->Uniform("tex");
+		_dimensionLocationID = _program->Uniform("dimension");
+		_centerLocationID = _program->Uniform("center");
 		loadArrayBuffers();
 		bindArrayBuffers();
 	}
@@ -65,13 +74,12 @@ void	Rectangle::Render(const std::vector<Rectangle>& rectangles)
 	{
 		if (!i || rectangles[i].textureID != rectangles[i - 1].textureID)
 		{
-			glBindTexture(GL_TEXTURE_2D, rectangles[i].textureID);
 			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, rectangles[i].textureID);
 			glUniform1i(_texLocationID, 0);
 		}
 		glUniform2f(_dimensionLocationID, rectangles[i].width, rectangles[i].height);
 		glUniform2f(_centerLocationID, rectangles[i].center.x, rectangles[i].center.y);
-
 		glDrawArrays(GL_TRIANGLES, 0, 2 * 3);
 	}
 }

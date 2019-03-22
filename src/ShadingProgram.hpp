@@ -5,25 +5,27 @@
 #include <EGL/egl.h>
 
 #include <string>
-#include <vector>
-#include <fstream>
-#include <iostream>
+#include <map>
 #include <sstream>
+#include <iostream>
+#include <fstream>
 
 class	ShadingProgram
 {
-private:
-
 	GLuint _program;
-	std::vector<GLuint> _uniformIDs;
-	ShadingProgram(void);
+	GLuint _vertexShaderID;
+	GLuint _fragmentShaderID;
+	std::map<std::string, GLuint> _uniforms;
 
-	std::string	GetShaderCode(std::string filepath);
-	void	CheckCompilation(GLuint, std::string filepath);
-	void	CheckLinking(void);
-	
+	ShadingProgram(void);
+	void _getUniforms();
+	std::string _getShaderCode(std::string filepath);
+	void _checkCompilation(GLuint, std::string filepath);
+	void _checkLinking();
+
 public:
 	ShadingProgram(std::string vertexPath, std::string fragPath);
-	void	Use(void);
-	GLuint	ID(void);
+	~ShadingProgram();
+	void Use();
+	GLuint Uniform(const std::string&);
 };

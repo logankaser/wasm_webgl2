@@ -5,8 +5,8 @@
 #include "Texture.hpp"
 #include "ShadingProgram.hpp"
 
-#define RECT_VERT_PATH "assets/shaders/rectVert.glsl"
-#define RECT_FRAG_PATH "assets/shaders/rectFrag.glsl"
+#define RECT_VERT_PATH "assets/shaders/rectangle.vert"
+#define RECT_FRAG_PATH "assets/shaders/rectangle.frag"
 
 class	Rectangle
 {
@@ -16,7 +16,7 @@ class	Rectangle
 	static GLuint _dimensionLocationID;
 	static GLuint _centerLocationID;
 	static GLuint _VAO;
-	static ShadingProgram* _program;
+	static std::shared_ptr<ShadingProgram> _program;
 
 	static void	loadArrayBuffers();
 	static void	bindArrayBuffers();

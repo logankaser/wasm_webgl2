@@ -9,7 +9,7 @@ class Texture
 public:
 	Texture(unsigned width, unsigned height, unsigned char* data);
 
-	static Texture	GenerateFromSVG(const std::string& filepath, int size);
+	static Texture	GenerateFromSVG(const std::string& filepath);
 
 	GLuint ID();
 };
