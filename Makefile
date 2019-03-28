@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: logan  <logan@42.us.org>                   +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2018/03/13 10:03:24 by lkaser            #+#    #+#              #
-#    Updated: 2019/03/27 19:58:45 by lkaser           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = index
 LIST = main \
 GLWindow \
@@ -72,7 +60,7 @@ fclean:
 	done
 	@printf "\e[31;1mFull Cleaning..\e[0m\n"
 	@rm -rf $(OBJ_DIR)
-	@rm -f index.js index.wasm index.data
+	@rm -f $(NAME).js $(NAME).wasm $(NAME).data
 
 run: all
 	python3 -m http.server 8080
