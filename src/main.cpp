@@ -1,10 +1,24 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <stdint.h>
 
 #include "GLWindow.hpp"
 #include "Rectangle.hpp"
 #include "Input.hpp"
+
+enum TextureMode : uint8_t {
+	nearest = 0,
+	mipmap = 1
+};
+
+extern "C" void __generate_texture(const char* identifier, size_t len, uint8_t mode, uint32_t* id);
+GLuint generate_texture(const std::string& identifier, TextureMode mode)
+{
+	uint32_t id;
+	__generate_texture(identifier.data(), identifier.length(), static_cast<uint8_t>(mode), &id);
+	return id;
+}
 
 void	test_render(void* arg)
 {
@@ -13,21 +27,12 @@ void	test_render(void* arg)
 	glClearColor(0.5, 0.1, 0.9, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	unsigned char test_texture1[] = {
-		255, 255, 140, 255,
-		100, 100, 100, 255,
-		100, 100, 129, 255,
-		255, 255, 255, 255
-	};
-	Texture t1 = {2, 2, test_texture1};
+	GLuint id = generate_texture("circle", TextureMode::mipmap);
 
-	Texture t2 = Texture::GenerateFromSVG("assets/svg_test.svg");
-	Texture t3 = t2;
+	Texture test = {id};
+
 	std::vector<Rectangle> rects;
-	//rects.push_back(Rectangle{0.4, 0.1, glm::vec2(-0.5), t1.ID()});
-	rects.push_back(Rectangle{1.0, 1.0, glm::vec2(0.0), t2.ID()});
-	//rects.push_back(Rectangle{0.1, 0.3, glm::vec2(0), t3.ID()});
-
+	rects.push_back(Rectangle{1.0, 1.0, glm::vec2(0.0), test.ID()});
 	Rectangle::Render(rects);
 
 	(void)input;
@@ -36,9 +41,8 @@ void	test_render(void* arg)
 
 int	main(void)
 {
-	GLWindow* window = new GLWindow("canvas");
+	GLWindow* window = new GLWindow("#gl");
 	Input* input = new Input("#body");
-
 	(void)window;
 
 	test_render(input);

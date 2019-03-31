@@ -1,39 +1,43 @@
 NAME = index
-LIST = main \
+LIST_CPP = main \
 GLWindow \
 Input \
 ShadingProgram \
 Rectangle \
 Texture
 
+LIST_JS = raster
+
 OBJ_DIR = obj
 
-VPATH = src
+VPATH = src:src/js
 
-SRC = $(addsuffix .cpp, $(LIST))
-OBJ = $(addsuffix .bc, $(addprefix $(OBJ_DIR)/, $(LIST)))
+SRC = $(addsuffix .cpp, $(LIST_CPP))
+OBJ = $(addsuffix .bc, $(addprefix $(OBJ_DIR)/, $(LIST_CPP)))
 DEP = $(OBJ:%.bc=%.d)
+
+SRC_JS = $(addsuffix .js, $(LIST_JS))
+OBJ_JS = $(addsuffix .min.js, $(addprefix $(OBJ_DIR)/, $(LIST_JS)))
+
 CC = em++
-SUB =
-INCLUDES=-I ~/.brew/include
+INCLUDES = -I ~/.brew/include
+
+MAKEFLAGS=-j4
 
 CPPFLAGS = -Wall -Wextra -Werror -O3 -std=c++17 $(INCLUDES)
 
-OPT = --llvm-lto 3 -O3 --closure 1
+#OPT = --llvm-lto 3 -O3 --closure 1
 
-LDFLAGS = $(OPT) -s ALLOW_MEMORY_GROWTH=1 -s WASM=1 -s USE_WEBGL2=1 \
+LDFLAGS = $(OPT) -s ALLOW_MEMORY_GROWTH=1 -s WASM=1 -s USE_WEBGL2=1 --pipe \
 --preload-file assets \
--s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1
+-s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 \
+--js-library src/js/library_raster.js --pre-js obj/raster.min.js
 
 all: $(OBJ_DIR) $(NAME).wasm
 
-$(NAME).wasm: $(OBJ)
-	@for s in $(SUB);\
-	do\
-		make -sC $$s;\
-	done
+$(NAME).wasm: $(OBJ) $(OBJ_JS)
 	@printf "\e[32;1mLinking.. \e[0m\n"
-	@$(CC) $(LDFLAGS) $^ -o $(NAME).js
+	@$(CC) $(LDFLAGS) $(OBJ) -o $(NAME).js
 	@printf "\e[32;1mCreated:\e[0m %s\n" $(NAME)
 
 $(OBJ_DIR):
@@ -45,19 +49,16 @@ $(OBJ_DIR)/%.bc: %.cpp
 	@printf "\e[34;1mCompiling: \e[0m%s\n" $<
 	@$(CC) $(CPPFLAGS) -MMD -c $< -o $@
 
+$(OBJ_DIR)/%.min.js: %.js
+	@printf "\e[36;1mCompiling: \e[0m%s\n" $<
+	@closure-compiler --language_in ECMASCRIPT_2016 $< --js_output_file $@
+
+
 clean:
-	@for s in $(SUB);\
-	do\
-		make -sC $$s clean;\
-	done
 	@printf "\e[31;1mCleaning..\e[0m\n"
 	@rm -f $(OBJ) $(DEP)
 
 fclean:
-	@for s in $(SUB);\
-	do\
-		make -sC $$s fclean;\
-	done
 	@printf "\e[31;1mFull Cleaning..\e[0m\n"
 	@rm -rf $(OBJ_DIR)
 	@rm -f $(NAME).js $(NAME).wasm $(NAME).data
@@ -65,6 +66,8 @@ fclean:
 run: all
 	python3 -m http.server 8080
 
-re:	fclean all
+re:
+	@$(MAKE) fclean 2>/dev/null
+	@$(MAKE) 2>/dev/null
 
 .PHONY: clean fclean all re
