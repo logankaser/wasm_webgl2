@@ -37,12 +37,22 @@ EM_BOOL Input::mouseUp(int, const EmscriptenMouseEvent* mouseEvent, void* data)
 	return false;
 }
 
+EM_BOOL Input::mouseMove(int, const EmscriptenMouseEvent* mouseEvent, void* data)
+{
+	Input* input = (Input*)data;
+
+//	std::cout << "move" << std::endl;
+	input->_mousePos = glm::vec2(mouseEvent->targetX, mouseEvent->targetY);
+	return false;
+}
+
 Input::Input(const char* element)
 {
 	emscripten_set_keydown_callback(element, this, false, keyDown);
 	emscripten_set_keyup_callback(element, this, false, keyUp);
 	emscripten_set_mousedown_callback(element, this, false, mouseDown);
 	emscripten_set_mouseup_callback(element, this, false, mouseUp);
+	emscripten_set_mousemove_callback(element, this, false, mouseMove);
 }
 
 void	Input::Update()
@@ -78,4 +88,9 @@ bool	Input::MouseClick(int button) const
 	if (button < _mouseButtons && button >= 0)
 		return _mouseClick[button];
 	return false;
+}
+
+glm::vec2	Input::MousePos() const
+{
+	return _mousePos;
 }

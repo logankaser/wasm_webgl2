@@ -4,7 +4,10 @@ GLWindow \
 Input \
 ShadingProgram \
 Rectangle \
-Texture
+Texture \
+TextureFactory \
+Client \
+Player
 
 LIST_JS = raster
 
