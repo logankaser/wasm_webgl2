@@ -2,5 +2,5 @@
 
 Client::Client() :
 window(_window_target),
-input(_input_target)
+input(_input_target, &window)
 {}

@@ -9,9 +9,9 @@ Player::~Player()
 {
 }
 
-void Player::Render()
+void Player::Render(glm::vec2 v)
 {
 	std::vector<Rectangle> rects;
-	rects.push_back(Rectangle{1.0, 1.0, glm::vec2(0.0), _texture.ID()});
+	rects.push_back(Rectangle{1.0, 1.0, v, _texture.ID()});
 	Rectangle::Render(rects);
 }

@@ -13,12 +13,9 @@ void main_loop(void* arg)
 
 	Client* client = static_cast<Client*>(arg);
 
-	client->player.Render();
-	// auto v = client->input.MousePos();
-	// std::cout << v.x << " " << v.y << std::endl;
-	std::cout << client->window.Width() << " "
-		<< client->window.Height() << " "
-		<< client->window.Aspect() << std::endl;
+	auto v = client->input.MousePos();
+	client->window.SetRenderRectangle(1, 1, v);
+	client->player.Render(v);
 }
 
 int	main()

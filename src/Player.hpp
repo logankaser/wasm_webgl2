@@ -17,5 +17,5 @@ public:
 	Player();
 	~Player();
 
-	void Render();
+	void Render(glm::vec2 v);
 };

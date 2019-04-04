@@ -49,17 +49,17 @@ GLWindow::~GLWindow()
 	emscripten_webgl_destroy_context(_context);
 }
 
-float	GLWindow::Aspect()
+float	GLWindow::Aspect() const
 {
 	return _aspect;
 }
 
-int	GLWindow::Width()
+int	GLWindow::Width() const
 {
 	return _width;
 }
 
-int	GLWindow::Height()
+int	GLWindow::Height() const
 {
 	return _height;
 }
@@ -71,11 +71,14 @@ void	GLWindow::SetRenderRectangle(float width, float height, glm::vec2 center)
 	int w, h;
 	emscripten_webgl_get_drawing_buffer_size(_context, &w, &h);
 
-	int x = (center.x - width / 2.0 + 1) / 2.0;
-	int y = (center.y - height / 2.0 + 1) / 2.0;
+	//std::cout << center.x << " " << center.y << std::endl;
+	float x = w * (center.x - width / 2.0 + 1) / 2.0;
+	float y = h * (center.y - height / 2.0 + 1) / 2.0;
 
 	w = w * width / 2.0 + 0.5;
 	h = h * height / 2.0 + 0.5;
+
+	std::cout << x << " " << y << " " << w << " " << h << std::endl;
 
 	glViewport(x, y, w, h);
 	glScissor(x, y, w, h);

@@ -41,13 +41,22 @@ EM_BOOL Input::mouseMove(int, const EmscriptenMouseEvent* mouseEvent, void* data
 {
 	Input* input = (Input*)data;
 
-//	std::cout << "move" << std::endl;
-	input->_mousePos = glm::vec2(mouseEvent->targetX, mouseEvent->targetY);
+	int mx = mouseEvent->targetX;
+	int my = mouseEvent->targetY;
+	int w = input->_window->Width();
+	int h = input->_window->Height();
+
+	input->_mousePos.x = (2.0 * float(mx) / float(w)) - 1.0;
+	// mousePos.y is inverted because emscripten coordinates start from
+	// top left, wheras openGL coordinates start from bottom left.
+	// We use OpenGL coordinate system.
+	input->_mousePos.y = 1 - (2.0 * float(my) / float(h));
 	return false;
 }
 
-Input::Input(const char* element)
+Input::Input(const char* element, const GLWindow* window)
 {
+	_window = window;
 	emscripten_set_keydown_callback(element, this, false, keyDown);
 	emscripten_set_keyup_callback(element, this, false, keyUp);
 	emscripten_set_mousedown_callback(element, this, false, mouseDown);

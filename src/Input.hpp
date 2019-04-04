@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include "graphic_core.hpp"
+#include "GLWindow.hpp"
 
 class	Input
 {
@@ -17,13 +18,15 @@ class	Input
 	bool _mouseClick[_mouseButtons] = {false};
 	glm::vec2 _mousePos = {0, 0};
 
+	const GLWindow* _window;
+
 	static EM_BOOL keyDown(int, const EmscriptenKeyboardEvent*, void*);
 	static EM_BOOL keyUp(int, const EmscriptenKeyboardEvent*, void*);
 	static EM_BOOL mouseDown(int, const EmscriptenMouseEvent*, void*);
 	static EM_BOOL mouseUp(int, const EmscriptenMouseEvent*, void*);
 	static EM_BOOL mouseMove(int, const EmscriptenMouseEvent*, void*);
 public:
-	Input(const char* element);
+	Input(const char* element, const GLWindow* window);
 
 	void	Update();
 	bool	KeyDown(const std::string&) const;

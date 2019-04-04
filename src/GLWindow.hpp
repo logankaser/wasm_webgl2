@@ -27,13 +27,13 @@ public:
 	~GLWindow();
 
 	//! aspect ratio of current render rectangle
-	float	Aspect();
+	float	Aspect() const;
 
 	//! width of window in pixels
-	int	Width();
+	int	Width() const;
 
 	//! height of window in pixels
-	int	Height();
+	int	Height() const;
 
 	//! sets the render rectangle based on normalized device coordinates
 	/*!
