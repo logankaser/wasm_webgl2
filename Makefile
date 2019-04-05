@@ -7,13 +7,15 @@ Rectangle \
 Texture \
 TextureFactory \
 Client \
-Player
+Player \
+Socket \
+game_protocol.pb
 
 LIST_JS = raster
 
 OBJ_DIR = obj
 
-VPATH = src:src/js
+VPATH = src:src/js:src/networking
 
 SRC = $(addsuffix .cpp, $(LIST_CPP))
 OBJ = $(addsuffix .bc, $(addprefix $(OBJ_DIR)/, $(LIST_CPP)))
@@ -23,7 +25,7 @@ SRC_JS = $(addsuffix .js, $(LIST_JS))
 OBJ_JS = $(addsuffix .min.js, $(addprefix $(OBJ_DIR)/, $(LIST_JS)))
 
 CC = em++
-INCLUDES = -I ~/.brew/include
+INCLUDES = -I ~/.brew/include -I src/ -I . $(pkg-config --cflags protobuf-lite)
 
 MAKEFLAGS=-j4
 
@@ -31,12 +33,13 @@ CPPFLAGS = -Wall -Wextra -Werror -O3 -std=c++17 $(INCLUDES)
 
 #OPT = --llvm-lto 3 -O3 --closure 1
 
-LDFLAGS = $(OPT) -s ALLOW_MEMORY_GROWTH=1 -s WASM=1 -s USE_WEBGL2=1 --pipe \
---preload-file assets \
+LDFLAGS = $(OPT) -s WASM=1 -s USE_WEBGL2=1 --pipe \
+--preload-file bundle \
 -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 \
---js-library src/js/library_raster.js --pre-js obj/raster.min.js
+--js-library src/js/library_raster.js --pre-js obj/raster.min.js \
+$(pkg-config --libs protobuf-lite)
 
-all: $(OBJ_DIR) $(NAME).wasm
+all: src/networking/game_protocol.pb.cpp $(OBJ_DIR) $(NAME).wasm
 
 $(NAME).wasm: $(OBJ) $(OBJ_JS)
 	@printf "\e[32;1mLinking.. \e[0m\n"
@@ -45,6 +48,12 @@ $(NAME).wasm: $(OBJ) $(OBJ_JS)
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
+
+src/networking/game_protocol.pb.cpp: game_protocol.proto
+	@printf "\e[35;1mCompiling: \e[0m%s\n" $^
+	@protoc $^ --cpp_out=.
+	@rename -f -s .cc .cpp $(dir $@)/*.cc
+	@printf "\e[32;1mCreated:\e[0m %s\n" $@
 
 -include $(DEP)
 
