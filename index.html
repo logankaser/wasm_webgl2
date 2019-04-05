@@ -17,10 +17,14 @@
 	<canvas tabindex=1 id="gl" class="M(0) P(0) H(100%) W(100%) D(b)">
 	</canvas>
 	<script>
-		const c = document.getElementById("gl");
-		c.width = window.innerWidth;
-		c.height = window.innerHeight;
-	</script>
+        const c = document.getElementById("gl");
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+        window.addEventListener("resize", () => {
+            c.width = window.innerWidth;
+            c.height = window.innerHeight;
+        });
+    </script>
 	<script async src="/index.js"></script>
 </body>
 </html>
