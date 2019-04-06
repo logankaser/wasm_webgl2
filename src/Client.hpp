@@ -3,6 +3,7 @@
 #include "GLWindow.hpp"
 #include "Input.hpp"
 #include "Player.hpp"
+#include "networking/Socket.hpp"
 
 class	Client
 {
@@ -13,6 +14,7 @@ public:
 	GLWindow window;
 	Input input;
 	Player player;
+	Socket socket;
 
 	Client();
 };
