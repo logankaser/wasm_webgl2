@@ -5,8 +5,8 @@
 #include "Texture.hpp"
 #include "ShadingProgram.hpp"
 
-#define RECT_VERT_PATH "assets/shaders/rectangle.vert"
-#define RECT_FRAG_PATH "assets/shaders/rectangle.frag"
+#define RECT_VERT_PATH "bundle/shaders/rectangle.vert"
+#define RECT_FRAG_PATH "bundle/shaders/rectangle.frag"
 
 class	Rectangle
 {

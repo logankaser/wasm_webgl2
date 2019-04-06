@@ -3,31 +3,36 @@
 window.raster_canvas = document.createElement("canvas");
 window.raster_cache = {};
 
-function register_texture_id(textureResource)
+function registerTextureId(texture)
 {
     var id = GL.getNewId(GL.textures);
-    textureResource.name = id;
-    GL.textures[id] = textureResource;
+    texture.name = id;
+    GL.textures[id] = texture;
 
     return id;
 }
 
-function unregister_texture_id(nativeTextureId)
+function unregisterTextureId(texture_id)
 {
-    var tex = GL.textures[nativeTextureId];
+    var tex = GL.textures[texture_id];
 
     tex.name = 0;
-    GL.textures[nativeTextureId] = null;
+    GL.textures[texture_id] = null;
 
     return tex;
 }
 
 
-function generate_texture(str_ptr, len, mode, id_ptr) {
+function generateTexture(str_ptr, len, mode, id_ptr) {
 	const id = AsciiToString(str_ptr, len);
 
-	if (window.raster_cache[id + mode])
-		return window.raster_cache[id + mode];
+	const cache_id = `${id}:${mode}`;
+	if (cache_id in window.raster_cache)
+	{
+		HEAPU32[id_ptr / 4] = window.raster_cache[cache_id];
+		return;
+	}
+	console.log(`Loading texture "${id}" with filter mode: ${mode}`);
 	// Rasterize SVG
 	const canvas = window.raster_canvas;
 	const r = canvas.getContext("2d");
@@ -40,7 +45,7 @@ function generate_texture(str_ptr, len, mode, id_ptr) {
 	// Upload to GPU.
 	const gl = document.getElementById("gl").getContext("webgl2");
 	const texture = gl.createTexture();
-	const texture_id = register_texture_id(texture);
+	const texture_id = registerTextureId(texture);
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	if (mode == 0)
 	{
@@ -72,5 +77,5 @@ function generate_texture(str_ptr, len, mode, id_ptr) {
 	HEAPU32[id_ptr / 4] = texture_id;
 
 	// Cache texture for later calls.
-	window.raster_cache[id + mode] = texture_id;
+	window.raster_cache[cache_id] = texture_id;
 }
