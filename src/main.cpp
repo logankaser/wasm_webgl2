@@ -50,7 +50,7 @@ void main_loop(void* arg)
 		if (diff.count() > 1.0)
 		{
 			if (client->socket.Connect("127.0.0.1", 3000) != Socket::success)
-				std::cerr << "Failed to reconnect to server" << std::endl;
+				std::cerr << "Error connecting to socket" << std::endl;
 			client->last_connect_time = now;
 		}
 	}
