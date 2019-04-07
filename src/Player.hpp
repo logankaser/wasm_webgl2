@@ -1,21 +1,15 @@
 #pragma once
 
-#include <emscripten.h>
-#include <emscripten/html5.h>
-#include <string>
-#include <unordered_map>
+#include "networking/game_protocol.pb.h"
+#include "Input.hpp"
 
-#include "graphic_core.hpp"
-#include "Rectangle.hpp"
-#include "TextureFactory.hpp"
-
+//! An abstraction over Input that converts raw input into actions
 class	Player
 {
-	Texture _texture;
-
+	const Input* _input;
 public:
-	Player();
+	Player(const Input*);
 	~Player();
 
-	void Render(glm::vec2 v);
+	game_protocol::Status GetStatus() const;
 };

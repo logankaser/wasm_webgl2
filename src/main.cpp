@@ -11,13 +11,14 @@
 void main_loop(void* arg)
 {
 	Client* client = static_cast<Client*>(arg);
-
+	static int count;
 	client->socket.Update();
 	if (client->socket.connected)
 	{
 		int socket = client->socket.GetSocket();
-		static int count = 0;
-		std::string msg = std::to_string(count);
+		auto status = client->player.GetStatus();
+		std::string msg;
+		status.AppendToString(&msg);
 		send(socket, msg.data(), msg.size(), 0);
 		uint8_t buff[4096];
 		int ret = recv(socket, &buff, 4096, 0);
@@ -47,7 +48,6 @@ void main_loop(void* arg)
 
 	auto v = client->input.MousePos();
 	client->window.SetRenderRectangle(1, 1, v);
-	client->player.Render(v);
 }
 
 int	main()
