@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <chrono>
 
 #include "Client.hpp"
 #include "networking/game_protocol.pb.h"
@@ -15,6 +16,7 @@ void main_loop(void* arg)
 	client->socket.Update();
 	if (client->socket.connected)
 	{
+		client->last_connect_time = std::chrono::system_clock::now();
 		int socket = client->socket.GetSocket();
 		static int count = 0;
 		std::string msg = std::to_string(count);
@@ -40,6 +42,17 @@ void main_loop(void* arg)
 			}
 		}
 		++count;
+	}
+	else
+	{
+		auto now = std::chrono::system_clock::now();
+		std::chrono::duration<double> diff = now - client->last_connect_time;
+		if (diff.count() > 1.0)
+		{
+			if (client->socket.Connect("127.0.0.1", 3000) != Socket::success)
+				std::cerr << "Failed to reconnect to server" << std::endl;
+			client->last_connect_time = now;
+		}
 	}
 
 	glClearColor(0.5, 0.1, 0.9, 1);
