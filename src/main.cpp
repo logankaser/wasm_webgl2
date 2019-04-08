@@ -37,7 +37,7 @@ void main_loop(void* arg)
 				game_protocol::Update up;
 				up.ParseFromArray(buff + 2, len);
 				std::cout << up.time() << std::endl;
-				for (auto entity : up.update()) {
+				for (auto entity : up.entity()) {
 					std::cout << entity.id() << std::endl;
 				}
 			}

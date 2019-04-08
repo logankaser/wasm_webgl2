@@ -32,7 +32,7 @@ message Renderable {
 message Update {
 	/* Used to keep update order and to calulate */
 	double time = 1;
-	repeated Entity update = 2;
+	repeated Entity entity = 2;
 	/* ids of entities to remove */
 	repeated uint32 remove = 3;
 }

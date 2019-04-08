@@ -10,6 +10,7 @@ Client \
 Player \
 Socket \
 Entity \
+EntityManager \
 Renderable \
 game_protocol.pb
 
