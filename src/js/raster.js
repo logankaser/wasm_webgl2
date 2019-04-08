@@ -35,12 +35,18 @@ function generateTexture(str_ptr, len, mode, id_ptr) {
 	console.log(`Loading texture "${id}" with filter mode: ${mode}`);
 	// Rasterize SVG
 	const canvas = window.raster_canvas;
-	const r = canvas.getContext("2d");
+	const ctx = canvas.getContext("2d");
 	const img = document.getElementById(id);
-	canvas.width = img.width;
-	canvas.height = img.height;
-	r.drawImage(img, 0, 0);
-	const img_data = r.getImageData(0, 0, img.width, img.height);
+	if (img.width > canvas.width)
+		canvas.width = img.width;
+	if (img.height > canvas.height)
+		canvas.height = img.height;
+	ctx.clearRect(0, 0, img.width, img.height);
+	//ctx.fillStyle = "#000";
+	//ctx.fillRect(0, 0, canvas.width, canvas.height);
+	//ctx.globalCompositeOperation = "source-in";
+	ctx.drawImage(img, 0, 0);
+	const img_data = ctx.getImageData(0, 0, img.width, img.height);
 
 	// Upload to GPU.
 	const gl = document.getElementById("gl").getContext("webgl2");

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <chrono>
+
 #include "GLWindow.hpp"
 #include "Input.hpp"
 #include "Player.hpp"
@@ -15,6 +17,7 @@ public:
 	Input input;
 	Player player;
 	Socket socket;
+	std::chrono::time_point<std::chrono::system_clock> last_connect_time;
 
 	Client();
 };
