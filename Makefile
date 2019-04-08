@@ -9,6 +9,8 @@ TextureFactory \
 Client \
 Player \
 Socket \
+Entity \
+Renderable \
 game_protocol.pb
 
 LIST_JS = raster
