@@ -27,10 +27,12 @@ GLWindow::GLWindow(const char* canvas)
 {
 	EmscriptenWebGLContextAttributes attrs;
 	emscripten_webgl_init_context_attributes(&attrs);
-	attrs.depth = 1;
-	attrs.antialias = 1;
 	attrs.majorVersion = 2;
 	attrs.minorVersion = 0;
+	attrs.depth = true;
+	attrs.antialias = true;
+	attrs.alpha = true;
+	attrs.powerPreference = EM_WEBGL_POWER_PREFERENCE_HIGH_PERFORMANCE;
 
 	_context = emscripten_webgl_create_context(canvas, &attrs);
 	emscripten_webgl_make_context_current(_context);

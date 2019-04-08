@@ -55,12 +55,14 @@ void main_loop(void* arg)
 		}
 	}
 
-	glClearColor(0.5, 0.1, 0.9, 1);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	auto v = client->input.MousePos();
 	client->window.SetRenderRectangle(1, 1, v);
+
+	glClearColor(0, 0, 1, 1);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	client->player.Render(v);
+	client->player.Render(v + glm::vec2(0, 0.3));
 }
 
 int	main()

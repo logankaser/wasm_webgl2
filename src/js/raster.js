@@ -42,9 +42,6 @@ function generateTexture(str_ptr, len, mode, id_ptr) {
 	if (img.height > canvas.height)
 		canvas.height = img.height;
 	ctx.clearRect(0, 0, img.width, img.height);
-	//ctx.fillStyle = "#000";
-	//ctx.fillRect(0, 0, canvas.width, canvas.height);
-	//ctx.globalCompositeOperation = "source-in";
 	ctx.drawImage(img, 0, 0);
 	const img_data = ctx.getImageData(0, 0, img.width, img.height);
 
@@ -53,6 +50,7 @@ function generateTexture(str_ptr, len, mode, id_ptr) {
 	const texture = gl.createTexture();
 	const texture_id = registerTextureId(texture);
 	gl.bindTexture(gl.TEXTURE_2D, texture);
+	gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 	if (mode == 0)
 	{
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
