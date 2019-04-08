@@ -41,7 +41,9 @@ void Socket::Update()
 {
 	_socket.revents = 0;
 	int ret = poll(&_socket, 1, 0);
-	if (ret > 0 && (_socket.revents & (POLLIN | POLLOUT)))
+	if (ret < 0 || _socket.revents & (POLLERR | POLLHUP | POLLPRI))
+		connected = false;
+	else if (_socket.revents & (POLLIN | POLLOUT))
 		connected = true;
 }
 

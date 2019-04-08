@@ -43,7 +43,7 @@ all: src/networking/game_protocol.pb.cpp $(OBJ_DIR) $(NAME).wasm
 
 $(NAME).wasm: $(OBJ) $(OBJ_JS) $(OBJ_DIR)/libprotobuf-lite.a
 	@printf "\e[32;1mLinking.. \e[0m\n"
-	$(CC) $(LDFLAGS) $(OBJ) $(OBJ_DIR)/libprotobuf-lite.a -o $(NAME).js
+	@$(CC) $(LDFLAGS) $(OBJ) $(OBJ_DIR)/libprotobuf-lite.a -o $(NAME).js
 	@printf "\e[32;1mCreated:\e[0m %s\n" $(NAME)
 
 $(OBJ_DIR):
@@ -64,7 +64,7 @@ $(OBJ_DIR)/%.min.js: %.js
 src/networking/game_protocol.pb.cpp: game_protocol.proto
 	@printf "\e[35;1mCompiling: \e[0m%s\n" $^
 	@protoc $^ --cpp_out=.
-	@rename -f -s .cc .cpp $(dir $@)/*.cc
+	@mv src/networking/game_protocol.pb.cc src/networking/game_protocol.pb.cpp
 	@printf "\e[32;1mCreated:\e[0m %s\n" $@
 
 $(OBJ_DIR)/libprotobuf-lite.a: lib/libprotobuf-lite.a.gz
