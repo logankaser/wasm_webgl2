@@ -7,8 +7,9 @@
 class	Player
 {
 	const Input* _input;
+	uint64_t _id;
 public:
-	Player(const Input*);
+	Player(const Input*, uint64_t id);
 	~Player();
 
 	game_protocol::Status GetStatus() const;
