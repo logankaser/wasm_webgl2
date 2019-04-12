@@ -32,15 +32,9 @@ void main_loop(void* arg)
 				std::cerr << "Update packet too large" << std::endl;
 			if (len + 2 != ret)
 				std::cerr << "Multi recv packet" << std::endl;
-			if (count % 60 == 0)
-			{
-				game_protocol::Update up;
-				up.ParseFromArray(buff + 2, len);
-				std::cout << up.time() << std::endl;
-				for (auto entity : up.entity()) {
-					std::cout << entity.id() << std::endl;
-				}
-			}
+			game_protocol::Update up;
+			up.ParseFromArray(buff + 2, len);
+			client->entity_manager.Update(up);
 		}
 		++count;
 	}
@@ -59,8 +53,7 @@ void main_loop(void* arg)
 	glClearColor(0.5, 0.1, 0.9, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	auto v = client->input.MousePos();
-	client->window.SetRenderRectangle(1, 1, v);
+	client->entity_manager.Render();
 }
 
 int	main()

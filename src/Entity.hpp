@@ -21,6 +21,6 @@ class	Entity
 
 public:
 
-	void Update(game_protocol::Entity);
+	void Update(game_protocol::Entity, double server_offset);
 	void Render();
 };

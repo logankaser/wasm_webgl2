@@ -12,6 +12,7 @@ Socket \
 Entity \
 EntityManager \
 Renderable \
+Time \
 game_protocol.pb
 
 LIST_JS = raster

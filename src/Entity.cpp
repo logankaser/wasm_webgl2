@@ -1,6 +1,6 @@
 #include "Entity.hpp"
 
-void Entity::Update(game_protocol::Entity entity)
+void Entity::Update(game_protocol::Entity entity, double server_offset)
 {
 	_created = entity.created();
 	_pos = glm::vec2(entity.pos_x(), entity.pos_y());
@@ -8,6 +8,9 @@ void Entity::Update(game_protocol::Entity entity)
 	_dir = glm::vec2(entity.dir_x(), entity.vel_y());
 	_name = entity.name();
 	_chat = entity.chat();
+
+	// Extrapolate position using server_offset time
+	_pos += _vel * server_offset;
 
 	// Update any renderables with new values. Add renderable ids
 	// to set of known_ids for use later with removing old renderables
