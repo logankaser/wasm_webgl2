@@ -46,7 +46,7 @@ void main_loop(void* arg)
 		std::chrono::duration<double> diff = now - client->last_connect_time;
 		if (diff.count() > 1.0)
 		{
-			if (client->socket.Connect("10.113.5.5", 3000) != Socket::success)
+			if (client->socket.Connect("127.0.0.1", 3000) != Socket::success)
 				std::cerr << "Error connecting to socket" << std::endl;
 			client->last_connect_time = now;
 		}
