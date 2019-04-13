@@ -1,7 +1,6 @@
 // "use strict";
 
 window.raster_canvas = document.createElement("canvas");
-window.raster_cache = {};
 
 function registerTextureId(texture)
 {
@@ -12,6 +11,7 @@ function registerTextureId(texture)
     return id;
 }
 
+/*
 function unregisterTextureId(texture_id)
 {
     var tex = GL.textures[texture_id];
@@ -21,17 +21,11 @@ function unregisterTextureId(texture_id)
 
     return tex;
 }
-
+*/
 
 function generateTexture(str_ptr, len, mode, id_ptr) {
-	const id = AsciiToString(str_ptr, len);
+	const id = UTF8ToString(str_ptr, len);
 
-	const cache_id = `${id}:${mode}`;
-	if (cache_id in window.raster_cache)
-	{
-		HEAPU32[id_ptr / 4] = window.raster_cache[cache_id];
-		return;
-	}
 	console.log(`Loading texture "${id}" with filter mode: ${mode}`);
 	// Rasterize SVG
 	const canvas = window.raster_canvas;
@@ -79,7 +73,4 @@ function generateTexture(str_ptr, len, mode, id_ptr) {
 
 	// Set texture id in WASM memory
 	HEAPU32[id_ptr / 4] = texture_id;
-
-	// Cache texture for later calls.
-	window.raster_cache[cache_id] = texture_id;
 }

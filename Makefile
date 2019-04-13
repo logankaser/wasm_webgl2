@@ -33,8 +33,8 @@ CPPFLAGS = -Wall -Wextra -O3 -std=c++17 $(INCLUDES)
 
 #OPT = --llvm-lto 3 -O3 --closure 1
 
-LDFLAGS = $(OPT) -s WASM=1 -s USE_WEBGL2=1 --pipe \
---preload-file bundle -pthread \
+LDFLAGS = $(OPT) --preload-file bundle -pthread \
+-s WASM=1 -s USE_WEBGL2=1 --pipe \
 -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 \
 --js-library src/js/library_raster.js --pre-js obj/raster.min.js \
 $(foreach js, $(LIST_JS), --js-library src/js/library_$(js).js --pre-js obj/$(js).min.js)
