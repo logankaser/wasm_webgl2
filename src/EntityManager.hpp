@@ -19,5 +19,6 @@ public:
 	EntityManager();
 
 	void Update(const game_protocol::Update&);
+	void Frame();
 	void Render();
 };

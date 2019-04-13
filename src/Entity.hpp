@@ -12,6 +12,10 @@ class	Entity
 {
 	std::unordered_map<uint32_t, Renderable*> _renderables;
 
+	// _renderpos and _pos may differ slightly when rubberbanding
+	// _pos is the actual position
+	glm::vec2 _renderpos;
+
 	double _created;
 	glm::vec2 _pos;
 	glm::vec2 _vel;
@@ -22,5 +26,6 @@ class	Entity
 public:
 
 	void Update(game_protocol::Entity, double server_offset);
+	void Frame(double dt);
 	void Render();
 };

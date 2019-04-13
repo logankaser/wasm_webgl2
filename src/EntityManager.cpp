@@ -32,6 +32,13 @@ void EntityManager::Update(const game_protocol::Update& update)
 		_entities.erase(rm);
 }
 
+void EntityManager::Frame()
+{
+	_timer.Fix();
+	for (auto& p : _entities)
+		p.second->Frame(_timer.Delta());
+}
+
 void EntityManager::Render()
 {
 	for (auto& p : _entities)

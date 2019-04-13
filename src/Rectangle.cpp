@@ -51,10 +51,13 @@ void	Rectangle::bindArrayBuffers()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
+#include <iostream>
+
 void	Rectangle::Render(const std::vector<Rectangle>& rectangles)
 {
 	if (!_program)
 	{
+		std::cout << "prog making" << std::endl;
 		_program = std::make_shared<ShadingProgram>(RECT_VERT_PATH, RECT_FRAG_PATH);
 		_texLocationID = _program->Uniform("tex");
 		_dimensionLocationID = _program->Uniform("dimension");

@@ -39,10 +39,18 @@ void Entity::Update(game_protocol::Entity entity, double server_offset)
 		_renderables.erase(id);
 }
 
+void Entity::Frame(double dt)
+{
+	_pos += _vel * dt;
+	double diff = 0.3;
+	_renderpos = _pos * (1 - diff) + _renderpos * diff;
+}
+
 void Entity::Render()
 {
 	for (auto& r : _renderables)
 	{
+		r.second->Render(_renderpos, _dir);
 		r.second->Render(_pos, _dir);
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <unordered_map>
 #include "graphic_core.hpp"
 #include "Texture.hpp"
 
@@ -20,6 +21,7 @@ enum class TextureMode : uint8_t
 
 class TextureFactory
 {
+	static std::unordered_map<std::string, GLuint> _cache;
 public:
 	static GLuint Create(const std::string& identifier, TextureMode);
 };
