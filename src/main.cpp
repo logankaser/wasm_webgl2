@@ -14,14 +14,15 @@ extern "C" void __set_hp(int hp);
 void main_loop(void* arg)
 {
 	Client* client = static_cast<Client*>(arg);
-
+	static int count;
 	client->socket.Update();
 	if (client->socket.connected)
 	{
 		client->last_connect_time = std::chrono::system_clock::now();
 		int socket = client->socket.GetSocket();
-		static int count = 0;
-		std::string msg = std::to_string(count);
+		auto status = client->player.GetStatus();
+		std::string msg;
+		status.AppendToString(&msg);
 		send(socket, msg.data(), msg.size(), 0);
 		uint8_t buff[4096];
 		int ret = recv(socket, &buff, 4096, 0);
@@ -33,15 +34,9 @@ void main_loop(void* arg)
 				std::cerr << "Update packet too large" << std::endl;
 			if (len + 2 != ret)
 				std::cerr << "Multi recv packet" << std::endl;
-			if (count % 60 == 0)
-			{
-				game_protocol::Update up;
-				up.ParseFromArray(buff + 2, len);
-				std::cout << up.time() << std::endl;
-				for (auto entity : up.update()) {
-					std::cout << entity.id() << std::endl;
-				}
-			}
+			game_protocol::Update up;
+			up.ParseFromArray(buff + 2, len);
+			client->entity_manager.Update(up);
 		}
 		++count;
 	}
@@ -51,22 +46,17 @@ void main_loop(void* arg)
 		std::chrono::duration<double> diff = now - client->last_connect_time;
 		if (diff.count() > 1.0)
 		{
-			if (client->socket.Connect("127.0.0.1", 3000) != Socket::success)
+			if (client->socket.Connect("10.113.5.5", 3000) != Socket::success)
 				std::cerr << "Error connecting to socket" << std::endl;
 			client->last_connect_time = now;
 		}
 	}
+	client->entity_manager.Frame();
 
-	static int hp = 0;
-	__set_hp(hp++ % 100);
-	auto v = client->input.MousePos();
-	client->window.SetRenderRectangle(1, 1, v);
-
-	glClearColor(0, 0, 1, 1);
+	glClearColor(0.5, 0.1, 0.9, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	client->player.Render(v);
-	client->player.Render(v + glm::vec2(0, 0.3));
+	client->entity_manager.Render();
 }
 
 int	main()
