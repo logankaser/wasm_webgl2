@@ -14,7 +14,7 @@ message Entity {
 	/* Visual direction */
 	float dir_x = 7;
 	float dir_y = 8;
-	/* Renderables are ids of different ways the object sould be rendered,
+	/* Renderables are ids of different ways the object should be rendered,
 	 * for example as a cloud of smoke or a texture. */
 	repeated uint32 renderable = 9;
 }

@@ -9,6 +9,8 @@
 #include "Client.hpp"
 #include "networking/game_protocol.pb.h"
 
+extern "C" void __set_hp(int hp);
+
 void main_loop(void* arg)
 {
 	Client* client = static_cast<Client*>(arg);
@@ -55,6 +57,8 @@ void main_loop(void* arg)
 		}
 	}
 
+	static int hp = 0;
+	__set_hp(hp++ % 100);
 	auto v = client->input.MousePos();
 	client->window.SetRenderRectangle(1, 1, v);
 
