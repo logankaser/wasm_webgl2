@@ -9,6 +9,10 @@ TextureFactory \
 Client \
 Player \
 Socket \
+Entity \
+EntityManager \
+Renderable \
+Time \
 game_protocol.pb
 
 LIST_JS = raster
@@ -25,23 +29,24 @@ SRC_JS = $(addsuffix .js, $(LIST_JS))
 OBJ_JS = $(addsuffix .min.js, $(addprefix $(OBJ_DIR)/, $(LIST_JS)))
 
 CC = em++
-INCLUDES = -I ~/.brew/include -I src/ -I . $(shell pkg-config --cflags protobuf-lite)
+INCLUDES = -I ~/include -I $(OBJ_DIR)/include -I src/ -I . $(shell pkg-config --cflags glm)
 
 MAKEFLAGS=-j4
 
-CPPFLAGS = -Wall -Wextra -Werror -O3 -std=c++17 $(INCLUDES)
+CPPFLAGS = -Wall -Wextra -std=c++17 -g4 $(INCLUDES)
 
 #OPT = --llvm-lto 3 -O3 --closure 1
+#DEBUG -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=2
 
-LDFLAGS = $(OPT) -s WASM=1 -s USE_WEBGL2=1 --pipe \
---preload-file bundle \
+LDFLAGS = $(OPT) $(DEBUG) --preload-file bundle -pthread \
+-s WASM=1 -s USE_WEBGL2=1 --pipe \
+-s ALLOW_MEMORY_GROWTH=1 \
 -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 \
---js-library src/js/library_raster.js --pre-js obj/raster.min.js \
- -pthread
+$(foreach js, $(LIST_JS), --js-library src/js/library_$(js).js --pre-js obj/$(js).min.js)
 
 all: src/networking/game_protocol.pb.cpp $(OBJ_DIR) $(NAME).wasm
 
-$(NAME).wasm: $(OBJ) $(OBJ_JS) $(OBJ_DIR)/libprotobuf-lite.a
+$(NAME).wasm:  $(OBJ_DIR)/libprotobuf-lite.a $(OBJ_DIR)/include $(OBJ) $(OBJ_JS)
 	@printf "\e[32;1mLinking.. \e[0m\n"
 	@$(CC) $(LDFLAGS) $(OBJ) $(OBJ_DIR)/libprotobuf-lite.a -o $(NAME).js
 	@printf "\e[32;1mCreated:\e[0m %s\n" $(NAME)
@@ -67,10 +72,15 @@ src/networking/game_protocol.pb.cpp: game_protocol.proto
 	@mv src/networking/game_protocol.pb.cc src/networking/game_protocol.pb.cpp
 	@printf "\e[32;1mCreated:\e[0m %s\n" $@
 
-$(OBJ_DIR)/libprotobuf-lite.a: lib/libprotobuf-lite.a.gz
+$(OBJ_DIR)/libprotobuf-lite.a: lib/libprotobuf-lite.a.7z
 	@printf "\e[35;1mExtracting: \e[0m%s\n" $^
-	@gunzip -k $^
-	@mv lib/libprotobuf-lite.a $@
+	@7z x -bd -y $< -o$(dir $@) > /dev/null
+	@touch $@
+
+$(OBJ_DIR)/include: lib/include.7z
+	@printf "\e[35;1mExtracting: \e[0m%s\n" $^
+	@7z x -bd -y $< -o$(dir $@) > /dev/null
+	@touch $@
 
 clean:
 	@printf "\e[31;1mCleaning..\e[0m\n"
@@ -82,6 +92,9 @@ fclean:
 	@rm -f $(NAME).js $(NAME).wasm $(NAME).data
 
 run: all
+	python3 -m http.server 8080
+
+serve:
 	python3 -m http.server 8080
 
 re:

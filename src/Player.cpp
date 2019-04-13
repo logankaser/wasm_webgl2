@@ -1,17 +1,25 @@
 #include "Player.hpp"
 
 
-Player::Player() :
-_texture(TextureFactory::Create("circle", TextureMode::mipmap))
-{}
+Player::Player(const Input* input, uint64_t id)
+{
+	_input = input;
+	_id = id;
+}
 
 Player::~Player()
 {
 }
 
-void Player::Render(glm::vec2 v)
+game_protocol::Status Player::GetStatus() const
 {
-	std::vector<Rectangle> rects;
-	rects.push_back(Rectangle{1.0, 1.0, v, _texture.ID()});
-	Rectangle::Render(rects);
+	game_protocol::Status status;
+	status.set_player_id(_id);
+	glm::vec2 mouse_pos = _input->MousePos();
+	status.set_vel_x(mouse_pos.x);
+	status.set_vel_y(mouse_pos.y);
+	status.set_dir_x(mouse_pos.x);
+	status.set_dir_y(mouse_pos.y);
+	status.add_action(game_protocol::Action::GUN);
+	return status;
 }

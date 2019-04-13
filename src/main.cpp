@@ -9,17 +9,20 @@
 #include "Client.hpp"
 #include "networking/game_protocol.pb.h"
 
+extern "C" void __set_hp(int hp);
+
 void main_loop(void* arg)
 {
 	Client* client = static_cast<Client*>(arg);
-
+	static int count;
 	client->socket.Update();
 	if (client->socket.connected)
 	{
 		client->last_connect_time = std::chrono::system_clock::now();
 		int socket = client->socket.GetSocket();
-		static int count = 0;
-		std::string msg = std::to_string(count);
+		auto status = client->player.GetStatus();
+		std::string msg;
+		status.AppendToString(&msg);
 		send(socket, msg.data(), msg.size(), 0);
 		uint8_t buff[4096];
 		int ret = recv(socket, &buff, 4096, 0);
@@ -31,15 +34,9 @@ void main_loop(void* arg)
 				std::cerr << "Update packet too large" << std::endl;
 			if (len + 2 != ret)
 				std::cerr << "Multi recv packet" << std::endl;
-			if (count % 60 == 0)
-			{
-				game_protocol::Update up;
-				up.ParseFromArray(buff + 2, len);
-				std::cout << up.time() << std::endl;
-				for (auto entity : up.update()) {
-					std::cout << entity.id() << std::endl;
-				}
-			}
+			game_protocol::Update up;
+			up.ParseFromArray(buff + 2, len);
+			client->entity_manager.Update(up);
 		}
 		++count;
 	}
@@ -54,13 +51,12 @@ void main_loop(void* arg)
 			client->last_connect_time = now;
 		}
 	}
+	client->entity_manager.Frame();
 
 	glClearColor(0.5, 0.1, 0.9, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	auto v = client->input.MousePos();
-	client->window.SetRenderRectangle(1, 1, v);
-	client->player.Render(v);
+	client->entity_manager.Render();
 }
 
 int	main()

@@ -11,14 +11,17 @@ ShadingProgram::ShadingProgram(std::string vp, std::string fp)
 	const char* shader_src;
 
 	_program = glCreateProgram();
-	shader_src = _getShaderCode(vp).data();
+	std::string vert = _getShaderCode(vp);
+	shader_src = vert.data();
+
 	_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(_vertexShaderID, 1, &shader_src, nullptr);
 	glCompileShader(_vertexShaderID);
 	_checkCompilation(_vertexShaderID, vp);
 	glAttachShader(_program, _vertexShaderID);
 
-	shader_src = _getShaderCode(fp).data();
+	std::string frag = _getShaderCode(fp);
+	shader_src = frag.data();
 	_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(_fragmentShaderID, 1, &shader_src, nullptr);
 	glCompileShader(_fragmentShaderID);
@@ -62,7 +65,7 @@ void	ShadingProgram::_checkCompilation(GLuint id, std::string path)
 		char *log = new char[logsize];
 
 		glGetShaderInfoLog(id, logsize, nullptr, log);
-		std::cerr << "Error compiling shader" << std::endl
+		std::cerr << "Error compiling shader "
 			<< "src: \"" << path << '"' << std::endl
 			<< log << std::endl << std::endl;
 		delete[] log;

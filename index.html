@@ -8,23 +8,39 @@
 	*,*:before,*:after{-moz-box-sizing:inherit;box-sizing:inherit}
 	.Bxz\(bb\){box-sizing:border-box}.D\(b\){display:block}.H\(100\%\){height:100%}
 	.M\(0\){margin:0}.P\(0\){padding:0}.W\(100\%\){width:100%}
+	.Z\(0\) {z-index: 0;}
+	.Z\(1\) {z-index: 1;}
+	.Pos\(a\) {position: absolute;}
 	</style>
 	<link rel="preload" href="assets/circle.svg" as="image">
+	<link rel="preload" href="index.wasm" as="fetch">
+	<link rel="preload" href="index.data" as="fetch">
+	<script async src="/index.js"></script>
 </head>
 
 <body id="body" class="H(100%) M(0)">
 	<img hidden id="circle" src="/assets/circle.svg" />
-	<canvas tabindex=1 id="gl" class="M(0) P(0) H(100%) W(100%) D(b)">
-	</canvas>
+	<canvas id="gl" class="M(0) P(0) Pos(a) H(100%) W(100%) D(b) Z(0)"></canvas>
+	<canvas id="ui" class="M(0) P(0) Pos(a) H(100%) W(100%) D(b) Z(1)" tabindex=1 ></canvas>
 	<script>
-		const c = document.getElementById("gl");
-		c.width = window.innerWidth;
-		c.height = window.innerHeight;
-		window.addEventListener("resize", () => {
-			c.width = window.innerWidth;
-			c.height = window.innerHeight;
-		});
+	(()=>{
+	const gl = document.getElementById("gl");
+	gl.width = window.innerWidth;
+	gl.height = window.innerHeight;
+	const ui = document.getElementById("ui");
+	ui.width = window.innerWidth;
+	ui.height = window.innerHeight;
+	window.resize_timer = 0;
+	window.addEventListener("resize", () => {
+		clearTimeout(window.resize_timer);
+		window.resize_timer = setTimeout(() => {
+			gl.width = window.innerWidth;
+			gl.height = window.innerHeight;
+			ui.width = window.innerWidth;
+			ui.height = window.innerHeight;
+		}, 500);
+	});
+	})();
 	</script>
-	<script async src="/index.js"></script>
 </body>
 </html>

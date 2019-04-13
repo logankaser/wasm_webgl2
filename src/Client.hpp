@@ -5,6 +5,7 @@
 #include "GLWindow.hpp"
 #include "Input.hpp"
 #include "Player.hpp"
+#include "EntityManager.hpp"
 #include "networking/Socket.hpp"
 
 class	Client
@@ -16,6 +17,7 @@ public:
 	GLWindow window;
 	Input input;
 	Player player;
+	EntityManager entity_manager;
 	Socket socket;
 	std::chrono::time_point<std::chrono::system_clock> last_connect_time;
 
