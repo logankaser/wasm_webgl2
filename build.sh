@@ -4,6 +4,7 @@ docker-machine ssh $machine sudo rm -rf /home/docker/build
 docker-machine ssh $machine mkdir /home/docker/build
 
 echo "Sending build data to server.."
+mkdir obj
 scp -i ~/.docker/machine/machines/$machine/id_rsa -pqr . docker@$(docker-machine ip $machine):/home/docker/build
 echo "------------------------------\n"
 
