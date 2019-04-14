@@ -38,5 +38,27 @@ make install
 cd ..
 rm -rf protobuf
 
+# Trick emscripten into caching everything
+cd /root/emsdk/
+. ./emsdk_env.sh
+cd /root/
+tee test.cpp <<EOF
+#include <GLES3/gl3.h>
+#include <EGL/egl.h>
+#include <emscripten.h>
+#include <emscripten/html5.h>
+#include <iostream>
+
+int main(){
+EmscriptenWebGLContextAttributes a;
+emscripten_webgl_init_context_attributes(&a);
+std::cout << "a" << std::endl;
+emscripten_webgl_create_context("a", &a);
+}
+EOF
+
+em++ -std=c++17 -s WASM=1 -s USE_WEBGL2=1 test.cpp
+rm -f a.out.js a.out.wasm test.cpp
+
 apt-get remove -y autoconf automake libtool g++
 apt-get autoremove -y

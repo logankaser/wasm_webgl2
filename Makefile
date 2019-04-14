@@ -33,14 +33,13 @@ INCLUDES = -I ~/include -I $(OBJ_DIR)/include -I src/ -I . $(shell pkg-config --
 
 MAKEFLAGS=-j4
 
-CPPFLAGS = -Wall -Wextra -std=c++17 -g4 $(INCLUDES)
+CPPFLAGS = -Wall -Wextra -std=c++17 $(INCLUDES)
 
 #OPT = --llvm-lto 3 -O3 --closure 1
 #DEBUG -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=2
 
 LDFLAGS = $(OPT) $(DEBUG) --preload-file bundle -pthread \
 -s WASM=1 -s USE_WEBGL2=1 --pipe \
--s ALLOW_MEMORY_GROWTH=1 \
 -s DISABLE_DEPRECATED_FIND_EVENT_TARGET_BEHAVIOR=1 \
 $(foreach js, $(LIST_JS), --js-library src/js/library_$(js).js --pre-js obj/$(js).min.js)
 
