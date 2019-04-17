@@ -9,11 +9,21 @@ EntityManager::EntityManager()
 
 void EntityManager::Update(const game_protocol::Update& update)
 {
+	// update server camera pos
+	_server_camera_pos.x = update.cam_x();
+	_server_camera_pos.y = update.cam_y();
+
+	_camera_scale = update.cam_scale();
+
+	// if first update...
 	if (_base_server_time < 0)
 	{
 		_base_server_time = update.time();
 		_timer.Reset();
+
+		_camera_pos = _server_camera_pos;
 	}
+
 	_timer.Fix();
 	double server_total = update.time() - _base_server_time;
 	double server_offset = _timer.Total() - server_total;
@@ -34,6 +44,10 @@ void EntityManager::Update(const game_protocol::Update& update)
 
 void EntityManager::Frame()
 {
+	// smoothly move camera towards server_camera
+	constexpr double dif = 0.3;
+	_camera_pos = _server_camera_pos * (1 - dif) + _camera_pos * dif;
+
 	_timer.Fix();
 	for (auto& p : _entities)
 		p.second->Frame(_timer.Delta());
@@ -42,5 +56,5 @@ void EntityManager::Frame()
 void EntityManager::Render()
 {
 	for (auto& p : _entities)
-		p.second->Render();
+		p.second->Render(_camera_scale, 1, _camera_pos);
 }

@@ -20,6 +20,6 @@ game_protocol::Status Player::GetStatus() const
 	status.set_vel_y(mouse_pos.y);
 	status.set_dir_x(mouse_pos.x);
 	status.set_dir_y(mouse_pos.y);
-	status.add_action(game_protocol::Action::GUN);
+	status.add_action(game_protocol::Action::NOTHING);
 	return status;
 }
