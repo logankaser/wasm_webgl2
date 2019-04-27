@@ -10,13 +10,6 @@ uniform float aspect;
 
 out vec2 uvCoor;
 
-vec2 rotate_origin(vec2 vertex, float angle)
-{
-	return vec2(
-		vertex.x * cos(angle) - vertex.y * sin(angle),
-		vertex.x * sin(angle) + vertex.y * cos(angle));
-}
-
 void	main()
 {
 	vec2 scaled_vertex = vertex * dimension;
