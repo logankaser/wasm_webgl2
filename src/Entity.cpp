@@ -73,12 +73,16 @@ void Entity::Render(float scale, float aspect, glm::vec2 cam_pos)
 
 	// get the entity position in normalized device coordinates
 	glm::vec2 normalized_pos = (cam_pos - _renderpos) / normalizing_box;
-
-	// how much objects should be scaled
-	glm::vec2 render_scale = glm::vec2(1.0) / normalizing_box;
+	
+	// cull offscreen entities
+	float screen_dist = glm::max(
+		glm::abs(normalized_pos.x),
+		glm::abs(normalized_pos.y))
+	if (screen_dist - _max_size * scale > 1.1)
+		return
 
 	for (auto& r : _renderables)
 	{
-		r.second->Render(normalized_pos, _dir, render_scale, aspect);
+		r.second->Render(normalized_pos, _dir, scale, aspect);
 	}
 }
