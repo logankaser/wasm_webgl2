@@ -79,6 +79,6 @@ void Entity::Render(float scale, float aspect, glm::vec2 cam_pos)
 
 	for (auto& r : _renderables)
 	{
-		r.second->Render(normalized_pos, _dir, render_scale);
+		r.second->Render(normalized_pos, _dir, render_scale, aspect);
 	}
 }

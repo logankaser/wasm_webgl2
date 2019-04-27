@@ -13,10 +13,16 @@ void Renderable::Update(const game_protocol::Renderable& r)
 	_color = r.color();
 }
 
-void Renderable::Render(glm::vec2 pos, glm::vec2 dir, glm::vec2 scale)
+void Renderable::Render(glm::vec2 pos, glm::vec2 dir, glm::vec2 scale, float aspect)
 {
-	(void)dir;
+	float angle = glm::acos(glm::dot(glm::normalize(dir), glm::vec2(0, 1)));
 	std::vector<Rectangle> rects;
-	rects.push_back(Rectangle{_size * scale.x, _size * scale.y, pos, _texture});
+	rects.push_back(Rectangle{
+		_size * scale.x,
+		_size * scale.y,
+		pos,
+		_texture,
+		angle,
+		aspect});
 	Rectangle::Render(rects);
 }

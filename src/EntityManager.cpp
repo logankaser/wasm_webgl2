@@ -45,7 +45,7 @@ void EntityManager::Update(const game_protocol::Update& update)
 void EntityManager::Frame()
 {
 	// smoothly move camera towards server_camera
-	constexpr double dif = 0.3;
+	constexpr double dif = 0.99;
 	_camera_pos = _server_camera_pos * (1 - dif) + _camera_pos * dif;
 
 	_timer.Fix();

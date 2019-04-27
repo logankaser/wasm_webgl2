@@ -5,6 +5,8 @@ GLuint Rectangle::_uvArrayID;
 GLuint Rectangle::_texLocationID;
 GLuint Rectangle::_dimensionLocationID;
 GLuint Rectangle::_centerLocationID;
+GLuint Rectangle::_rotationLocationID;
+GLuint Rectangle::_aspectLocationID;
 GLuint Rectangle::_VAO;
 std::shared_ptr<ShadingProgram> Rectangle::_program;
 
@@ -59,6 +61,8 @@ void	Rectangle::Render(const std::vector<Rectangle>& rectangles)
 		_texLocationID = _program->Uniform("tex");
 		_dimensionLocationID = _program->Uniform("dimension");
 		_centerLocationID = _program->Uniform("center");
+		_rotationLocationID = _program->Uniform("rotation");
+		_aspectLocationID = _program->Uniform("aspect");
 		loadArrayBuffers();
 		bindArrayBuffers();
 	}
@@ -80,6 +84,8 @@ void	Rectangle::Render(const std::vector<Rectangle>& rectangles)
 		}
 		glUniform2f(_dimensionLocationID, rectangles[i].width, rectangles[i].height);
 		glUniform2f(_centerLocationID, rectangles[i].center.x, rectangles[i].center.y);
+		glUniform1f(_rotationLocationID, rectangles[i].rotation);
+		glUniform1f(_aspectLocationID, rectangles[i].aspect);
 		glDrawArrays(GL_TRIANGLES, 0, 2 * 3);
 	}
 }

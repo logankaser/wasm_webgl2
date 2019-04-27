@@ -7,6 +7,7 @@
 #include "Player.hpp"
 #include "EntityManager.hpp"
 #include "networking/Socket.hpp"
+#include "config.hpp"
 
 class	Client
 {
