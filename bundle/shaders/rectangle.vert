@@ -20,7 +20,7 @@ void	main()
 		scaled_vertex.x * sin(angle) + scaled_vertex.y * cos(angle));
 
 	// apply aspect
-	if (aspect > 1)
+	if (aspect > 1.0)
 		scaled_vertex.x /= aspect;
 	else
 		scaled_vertex.y *= aspect;

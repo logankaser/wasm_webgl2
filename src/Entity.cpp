@@ -77,9 +77,9 @@ void Entity::Render(float scale, float aspect, glm::vec2 cam_pos)
 	// cull offscreen entities
 	float screen_dist = glm::max(
 		glm::abs(normalized_pos.x),
-		glm::abs(normalized_pos.y))
+		glm::abs(normalized_pos.y));
 	if (screen_dist - _max_size * scale > 1.1)
-		return
+		return;
 
 	for (auto& r : _renderables)
 	{
