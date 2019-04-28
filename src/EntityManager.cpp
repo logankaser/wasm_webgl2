@@ -56,5 +56,7 @@ void EntityManager::Frame()
 void EntityManager::Render()
 {
 	for (auto& p : _entities)
+	{
 		p.second->Render(_camera_scale, 1, _camera_pos);
+	}
 }

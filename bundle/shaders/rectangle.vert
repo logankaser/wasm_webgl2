@@ -16,8 +16,8 @@ void	main()
 
 	// apply rotation
 	scaled_vertex = vec2(
-		scaled_vertex.x * cos(angle) - scaled_vertex.y * sin(angle),
-		scaled_vertex.x * sin(angle) + scaled_vertex.y * cos(angle));
+		scaled_vertex.x * cos(rotation) - scaled_vertex.y * sin(rotation),
+		scaled_vertex.x * sin(rotation) + scaled_vertex.y * cos(rotation));
 
 	// apply aspect
 	if (aspect > 1.0)
