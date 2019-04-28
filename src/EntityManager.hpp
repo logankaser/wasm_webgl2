@@ -15,6 +15,16 @@ class	EntityManager
 	double _base_server_time;
 	Time _timer;
 
+	// the position of the camera according to the server
+	glm::vec2 _server_camera_pos;
+
+	// the position of camera used for game logic (smoothly follows
+	// the server camera)
+	glm::vec2 _camera_pos;
+
+	// the viewing rectangle of the camera
+	float _camera_scale;
+
 public:
 	EntityManager();
 

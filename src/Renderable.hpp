@@ -16,5 +16,5 @@ public:
 	Renderable(const game_protocol::Renderable&);
 
 	void Update(const game_protocol::Renderable&);
-	void Render(glm::vec2 pos, glm::vec2 dir);
+	void Render(glm::vec2 pos, glm::vec2 dir, float scale, float aspect);
 };

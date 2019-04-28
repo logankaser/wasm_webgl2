@@ -15,6 +15,8 @@ class	Rectangle
 	static GLuint _texLocationID;
 	static GLuint _dimensionLocationID;
 	static GLuint _centerLocationID;
+	static GLuint _rotationLocationID;
+	static GLuint _aspectLocationID;
 	static GLuint _VAO;
 	static std::shared_ptr<ShadingProgram> _program;
 
@@ -27,6 +29,11 @@ public:
 	float height;
 	glm::vec2 center;
 	GLuint textureID;
+
+	// clockwise rotation of rectangle in radians
+	float rotation;
+	// aspect ratio to render the rectangle at
+	float aspect;
 
 	// for optimal rendering, place rectangles with the same textureIDs
 	// next to each other

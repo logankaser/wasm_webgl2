@@ -23,9 +23,14 @@ class	Entity
 	std::string _name;
 	std::string _chat;
 
+	float _max_size;
+
+	// used to make playing on different aspect ratios fair
+	static constexpr const float _area_modifier = 0.7;
+
 public:
 
 	void Update(game_protocol::Entity, double server_offset);
 	void Frame(double dt);
-	void Render();
+	void Render(float scale, float aspect, glm::vec2 cam_pos);
 };

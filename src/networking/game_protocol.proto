@@ -35,11 +35,18 @@ message Update {
 	repeated Entity entity = 2;
 	/* ids of entities to remove */
 	repeated uint32 remove = 3;
+	/* camera position */
+	float cam_x = 4;
+	float cam_y = 5;
+	/* camera scale */
+	float cam_scale = 6;
 }
 
 enum Action {
 	NOTHING = 0;
-	GUN = 1;
+	ACTION_1 = 1;
+	ACTION_2 = 2;
+	ACTION_3 = 3;
 }
 
 message Status {
