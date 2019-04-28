@@ -3,7 +3,8 @@
 Client::Client() :
 window(_window_target),
 input(_input_target, &window),
-player(&input, 42)
+player(&input, 42),
+entity_manager(&window)
 {
 	if (socket.Connect(SERVER_IP, 3000) != Socket::success)
 		std::cerr << "Error connecting to server" << std::endl;

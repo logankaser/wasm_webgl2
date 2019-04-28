@@ -13,6 +13,7 @@ Entity \
 EntityManager \
 Renderable \
 Time \
+Background \
 game_protocol.pb
 
 LIST_JS = raster

@@ -1,10 +1,13 @@
 #include "EntityManager.hpp"
 
-EntityManager::EntityManager()
+EntityManager::EntityManager(const GLWindow* window)
 {
 	// negative time is invalid so can be used to signal no update
 	// has taken place
 	_base_server_time = -1;
+	_background = new Background("bundle/shaders/background.frag");
+	_camera_scale = 1;
+	_window = window;
 }
 
 void EntityManager::Update(const game_protocol::Update& update)
@@ -58,8 +61,9 @@ void EntityManager::Frame()
 
 void EntityManager::Render()
 {
+	_background->Render(_camera_pos, _camera_scale, _window->Aspect());
 	for (auto& p : _entities)
 	{
-		p.second->Render(_camera_scale, 1, _camera_pos);
+		p.second->Render(_camera_scale, _window->Aspect(), _camera_pos);
 	}
 }

@@ -8,6 +8,8 @@
 #include "networking/game_protocol.pb.h"
 #include "Entity.hpp"
 #include "Time.hpp"
+#include "Background.hpp"
+#include "GLWindow.hpp"
 
 class	EntityManager
 {
@@ -24,9 +26,14 @@ class	EntityManager
 
 	// the viewing rectangle of the camera
 	float _camera_scale;
+	
+	Background* _background;
+	
+	// for getting aspect ratio
+	const GLWindow* _window;
 
 public:
-	EntityManager();
+	EntityManager(const GLWindow*);
 
 	void Update(const game_protocol::Update&);
 	void Frame();

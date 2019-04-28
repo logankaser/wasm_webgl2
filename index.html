@@ -30,15 +30,11 @@
 	const ui = document.getElementById("ui");
 	ui.width = window.innerWidth;
 	ui.height = window.innerHeight;
-	window.resize_timer = 0;
 	window.addEventListener("resize", () => {
-		clearTimeout(window.resize_timer);
-		window.resize_timer = setTimeout(() => {
-			gl.width = window.innerWidth;
-			gl.height = window.innerHeight;
-			ui.width = window.innerWidth;
-			ui.height = window.innerHeight;
-		}, 500);
+		gl.width = window.innerWidth;
+		gl.height = window.innerHeight;
+		ui.width = window.innerWidth;
+		ui.height = window.innerHeight;
 	});
 	})();
 	</script>
