@@ -72,7 +72,7 @@ void Entity::Render(float scale, float aspect, glm::vec2 cam_pos)
 		normalizing_box	*= box_area / scale_sq;
 
 	// get the entity position in normalized device coordinates
-	glm::vec2 normalized_pos = (cam_pos - _renderpos) / normalizing_box;
+	glm::vec2 normalized_pos = (_renderpos - cam_pos) / normalizing_box;
 	
 	// cull offscreen entities
 	float screen_dist = glm::max(

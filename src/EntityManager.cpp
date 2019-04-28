@@ -39,7 +39,10 @@ void EntityManager::Update(const game_protocol::Update& update)
 	}
 	// remove entities in remove field
 	for (auto rm : update.remove())
+	{
+		delete _entities[rm];
 		_entities.erase(rm);
+	}
 }
 
 void EntityManager::Frame()
